@@ -35,6 +35,8 @@ class ViewController: UIViewController {
     ]
     var questionIndex = 0
     
+    var timer: Timer?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,22 +48,27 @@ class ViewController: UIViewController {
         let answer = sender.currentTitle
         let correct = quiz[questionIndex].answer
         if answer == correct {
-            print("Correct")
+            sender.backgroundColor = .green
         }
         else {
-            print("Wrong")
+            sender.backgroundColor = .red
         }
         
         questionIndex += 1
         if quiz.count <= questionIndex {
             questionIndex = 0
         }
-        updateUI()
+        
+        timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateUI),
+                                     userInfo: nil, repeats: false)
     }
     
     
-    func updateUI() {
+    @objc func updateUI() {
         questionLabel.text = quiz[questionIndex].text
+        trueButton.backgroundColor = .clear
+        falseButton.backgroundColor = .clear
+        progressBar.progress = Float(questionIndex) / Float(quiz.count)
     }
     
 }
