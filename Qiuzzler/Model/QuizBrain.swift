@@ -1,19 +1,14 @@
 //
-//  ViewController.swift
+//  QuizBrain.swift
 //  Qiuzzler
 //
 //  Created by anesin on 1/4/25.
 //
 
-import UIKit
+import Foundation
 
 
-class ViewController: UIViewController {
-    
-    @IBOutlet weak var questionLabel: UILabel!
-    @IBOutlet weak var trueButton: UIButton!
-    @IBOutlet weak var falseButton: UIButton!
-    @IBOutlet weak var progressBar: UIProgressView!
+struct QuizBrain {
     
     let quiz = [
         Question(q: "Four + Two is equal to Six.",        a: "True"),
@@ -33,42 +28,32 @@ class ViewController: UIViewController {
         Question(q: "No piece of square dry paper can be folded in half more than 7 times.", a: "False"),
         Question(q: "Chocolate affects a dog's heart and nervous system; a few ounces are enough to kill a small dog.", a: "True")
     ]
+    
     var questionIndex = 0
     
-    var timer: Timer?
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        updateUI()
+   
+    func checkAnswer(_ userAnswer: String) -> Bool {
+        return userAnswer == quiz[questionIndex].answer
     }
-
     
-    @IBAction func answerButtonPressed(_ sender: UIButton) {
-        let answer = sender.currentTitle
-        let correct = quiz[questionIndex].answer
-        if answer == correct {
-            sender.backgroundColor = .green
-        }
-        else {
-            sender.backgroundColor = .red
-        }
-        
+    
+    mutating func next() -> Bool {
         questionIndex += 1
         if quiz.count <= questionIndex {
             questionIndex = 0
+            return false
         }
-        
-        timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateUI),
-                                     userInfo: nil, repeats: false)
+        return true
     }
     
     
-    @objc func updateUI() {
-        questionLabel.text = quiz[questionIndex].text
-        trueButton.backgroundColor = .clear
-        falseButton.backgroundColor = .clear
-        progressBar.progress = Float(questionIndex) / Float(quiz.count)
+    func getQuestionText() -> String {
+        return quiz[questionIndex].text
+    }
+    
+    
+    func progress() -> Float {
+        return Float(questionIndex) / Float(quiz.count)
     }
     
 }
