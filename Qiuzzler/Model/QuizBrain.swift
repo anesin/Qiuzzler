@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct QuizBrain {
+class QuizBrain {
     
     let quiz = [
         Question(q: "Four + Two is equal to Six.",        a: "True"),
@@ -30,20 +30,24 @@ struct QuizBrain {
     ]
     
     var questionIndex = 0
+    public private(set) var score: Int = 0
     
    
     func checkAnswer(_ userAnswer: String) -> Bool {
-        return userAnswer == quiz[questionIndex].answer
+        if userAnswer == quiz[questionIndex].answer {
+            score += 1
+            return true
+        }
+        return false
     }
     
     
-    mutating func next() -> Bool {
+    func next() {
         questionIndex += 1
         if quiz.count <= questionIndex {
             questionIndex = 0
-            return false
+            score = 0
         }
-        return true
     }
     
     
